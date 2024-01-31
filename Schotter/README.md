@@ -1,0 +1,2 @@
+The methods for creating this pattern is in the drawPattern method which uses transformRect which uses drawRect as a helper function.
+The Variation is just a red version in cirular shapes showing translate and scale.

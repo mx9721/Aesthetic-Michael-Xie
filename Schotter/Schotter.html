@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Schotter</title>
+    <style type="text/css">
+        body {
+            margin: 0;
+            padding: 0;
+        }
+    </style>
+</head>
+
+<body>
+    <svg></svg>
+
+    <script>
+        const makeMySVG = () => {
+            return `
+            <svg width="100%" height="100%" viewBox="0 0 1500 2500">
+                ${drawPattern()}
+            </svg>`
+        }
+
+        const drawRect = (x, y, width, height, stroke) => {
+            return `
+            <rect x="${x}" y="${y}" width="${width}" height="${height}" stroke="${stroke}" fill="none" />
+            `
+        }
+
+        const transformRect = (x, y, width, height, stroke, rotate, translateX, translateY, scaleX, scaleY) => {
+            return `
+            <g transform="rotate(${rotate} ${x} ${y}) translate(${translateX} ${translateY}) scale(${scaleX} ${scaleY})">
+                ${drawRect(x, y, width, height, stroke)}
+            </g>`
+        }
+
+        const drawPattern = () => {
+            let html = "";
+            let y = 50;
+            let x = 100;
+            let factor = 1;
+            let lastrand;
+
+            for (let i = 0; i < 22; i++) {
+                y += 100;
+                x = 100 + i*4;
+                
+                for (let j = 0; j < 12; j++) {
+                    let random;
+                    if(j % 2 == 0)
+                    {
+                        random = -factor;
+                    }
+                    else
+                    {
+                        random = factor;
+                    }
+
+                    html += `${transformRect(x, y, 100, 100, "black", Math.floor(Math.random() * factor), Math.floor(Math.random() * factor), Math.floor(Math.random() * factor), 1, 1)}`;
+                    x += 100;
+                }
+                factor += 4;
+            }
+
+            console.log(html);
+            return html;
+        }
+
+        document.querySelector("svg").outerHTML = makeMySVG();
+    </script>
+</body>
+
+</html>
