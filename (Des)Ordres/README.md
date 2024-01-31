@@ -1,0 +1,2 @@
+The methods for creating this pattern is in the drawPattern method which uses drawPolygon, and the whole svg is written by drawOrdres which uses a loop of drawPattern.
+The Variation is just a red version in triangular shapes instead of rectangular.

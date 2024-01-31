@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>(Des)Ordres Variation</title>
+    <style type="text/css">
+        body {
+            margin: 0;
+            padding: 0;
+        }
+    </style>
+</head>
+<body>
+    <svg></svg>
+
+    <script>
+        const makeMySVG = () => {
+            return `
+            <svg width="100%" height="100%" viewBox="0 0 1700 1700">
+                ${drawOrdres()}
+            </svg>`
+        }
+
+        const drawPolygon = (points, stroke) => {
+            return `
+            <polygon points="${points}" stroke="${stroke}" fill="none" />
+            `
+        }
+
+        const drawPattern = (x, y, stroke) => {
+            let html = "";
+
+            let shapes = 3 + Math.floor(Math.random() * 10);
+
+            let xmin = x - 10;
+            let xmax = x + 100;
+            let ymin = y - 10;
+            let ymax = y + 100;
+
+            for (let i = 0; i < shapes; i++) {
+                xmin += 5;
+                xmax -= 5;
+                ymin += 5;
+                ymax -= 5;
+
+                let x1 = xmin + Math.floor(Math.random() * 15);
+                let y1 = ymin + Math.floor(Math.random() * 15);
+
+                let x2 = xmax - Math.floor(Math.random() * 15);
+                let y2 = ymin + Math.floor(Math.random() * 15);
+
+                let x3 = x + 80 - Math.floor(Math.random() * 61);
+                let y3 = ymax - Math.floor(Math.random() * 15);
+                
+                let points = `${x1},${y1} ${x2},${y2} ${x3},${y3}`;
+                html += `${drawPolygon(points, stroke)}`;
+            }
+
+            return html;
+        }
+
+        const drawOrdres = () => {
+            let html = "";
+            let x = -100;
+            let y = -100;
+
+            for (let j = 0; j < 17; j++)
+            {
+                y += 100;
+                x = -100;
+                for (let h = 0; h < 17; h++)
+                {
+                    x += 100;
+                    html += `${drawPattern(x, y, "red")}`
+                }
+            }
+
+            return html;
+        }
+
+        document.querySelector("svg").outerHTML = makeMySVG();
+    </script>
+</body>
+</html>
