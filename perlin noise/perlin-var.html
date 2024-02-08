@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Perlin Noise Lines</title>
+    <style type="text/css">
+        body {
+            margin: 0;
+            padding: 0;
+        }
+    </style>
+</head>
+
+<body>
+    <svg></svg>
+
+    <script>
+
+
+        const drawLine = (x1, y1, x2, y2, stroke, strokeWidth) => {
+            return `
+            <line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke="${stroke}" stroke-width="${strokeWidth}" fill="none" />
+            `
+        }
+
+        const transformLine = (x1, x2, y1, y2, stroke, rotate, strokeWidth, translateX, translateY, scaleX, scaleY) => {
+            return `
+            <g transform="rotate(${rotate} ${x1} ${y1}) translate(${translateX} ${translateY}) scale(${scaleX} ${scaleY})">
+                ${drawLine(x1, x2, y1, y2, stroke, strokeWidth)}
+            </g>`
+        }
+
+        const randomXVector = (theta) => {
+            let x = Math.cos(theta);
+            return x;
+        }
+
+        const randomYVector = (theta) => {
+            let y = Math.sin(theta);
+            return y;
+        }
+
+        const dotGrid = (x, y, vx, vy) => {
+            let theta = Math.random() * 2 * Math.PI;
+
+            let gridVectX = randomXVector(theta);
+            let gridVectY = randomYVector(theta);
+
+            let dotVectX = x - vx;
+            let dotVectY = y - vy;
+
+            return dotVectX * gridVectX + dotVectY * gridVectY;
+        }
+
+        const smooth = (x) => {
+            return 6 * x ** 5 - 15 * x ** 4 + 10 * x ** 3;
+        }
+
+        const interp = (x, a, b) => {
+            return a + smooth(x) * (b - a);
+        }
+
+        const perlin = (x, y) => {
+
+            let xfloor = Math.floor(x);
+            let yfloor = Math.floor(y);
+
+            let tr = dotGrid(x, y, xfloor + 1, yfloor);
+            let bl = dotGrid(x, y, xfloor, yfloor + 1);
+            let br = dotGrid(x, y, xfloor + 1, yfloor + 1);
+
+            let xt = interp(x - xfloor, bl, tr);
+            let xb = interp(x - xfloor, bl, br);
+            let v = interp(y - yfloor, xt, xb);
+
+            return v;
+        }
+
+        const makeMySVG = () => {
+
+            gridSize = 55;
+
+            let y = 0;
+            let x = 0;
+
+            let html = "";
+
+            for (let i = 0; i < 100; i++) {
+                for (let j = 0; j < 100; j++) {
+                    let v = parseInt(perlin(x, y) * 2);
+
+                    html += transformLine(x, y, x + 5, y + 5, "black", 0.1, v * 30, v, v, 1, 1);
+                    x += 10;
+                }
+                x = 0;
+                y += 10;
+            }
+
+            return `
+            <svg width="100%" height="100%" viewBox="0 0 1000 1000">
+                ${html}
+            </svg>`
+        }
+
+        document.querySelector("svg").outerHTML = makeMySVG();
+    </script>
+</body>
+
+</html>

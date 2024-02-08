@@ -1,0 +1,1 @@
+I used perlin noise to recreate the piece but it came out a little more different then I thought tbh. The perlin noise uses interpolate to calcutate the rotation for every line. The variation was quite cool imo tho it was a mistake. 
