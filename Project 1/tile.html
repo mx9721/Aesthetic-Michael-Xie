@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tiles</title>
+    <style type="text/css">
+        body {
+            margin: 0;
+            padding: 0;
+        }
+
+        svg {
+            width: 1000px;
+            height: 1000px;
+        }
+    </style>
+</head>
+
+<body>
+    <svg></svg>
+
+    <script>
+        const getRandomRotation = () => {
+            const rotations = [0, 90, 180, 270];
+            const randomIndex = Math.floor(Math.random() * rotations.length);
+            return rotations[randomIndex];
+        }
+
+        const drawCircle = (cx, cy, r, stroke) => {
+            return `
+            <circle cx="${cx}" cy="${cy}" r="${r}" stroke="${stroke}" fill="none" />
+            `
+        }
+
+        const drawEllipse = (cx, cy, rx, ry, stroke) => {
+            return `
+            <ellipse cx="${cx}" cy="${cy}" rx="${rx}" ry="${ry}" stroke="${stroke}" fill="none" />
+            `
+        }
+
+        const drawLine = (x1, y1, x2, y2, stroke, strokeWidth) => {
+            return `
+            <line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke="${stroke}" stroke-width="${strokeWidth}" fill="none" />
+            `
+        }
+
+        const drawPath = (d, stroke, strokeWidth) => {
+            return `
+            <path d="${d}" fill="none" stroke="${stroke}" stroke-width="${strokeWidth}" />
+            `
+        }
+
+        const createRotatablePattern = (size, rotation) => {
+            const cX = size / 2;
+            const cY = size / 2;
+
+            let sHtml = "<g>"
+
+            for (let i = 0; i < 2; i++) {
+                const gRotation = (rotation + i * 90) % 360;
+                sHtml += `<g transform="rotate(${gRotation} ${cX} ${cY})">`;
+
+                sHtml += drawEllipse(cX, cY, size / 4, size / 8, "#EC91D8");
+                sHtml += drawLine(cX - size / 4, cY, cX + size / 4, cY, "#FFD3DA", 3);
+                sHtml += drawCircle(cX, cY, size / 8, "#EC91D8  ");
+
+                sHtml += `</g>`
+            }
+
+            sHtml += `</g>`;
+
+            return sHtml;
+        }
+
+
+        const createTruchetTile = (size, row, col) => {
+            const rotation = getRandomRotation();
+
+            let tHtml = ""
+
+            tHtml += `<g transform="translate(${col * size} ${row * size}) rotate(${rotation} ${size / 2} ${size / 2})">
+                    ${drawPath(`M 0 0 Q ${size / 2} ${size / 2} ${size} 0`, "#FFBEEF", 3)}
+                    ${drawPath(`M 0 ${size} Q ${size / 2} ${size / 2} ${size} ${size}`, "#EC91D8", 3)}
+                    ${createRotatablePattern(size, Math.floor(Math.random() * 360))}
+                </g>
+            `;
+
+            return tHtml;
+        }
+
+        // Function to create the interesting Truchet pattern
+        const createTruchetPattern = (rows, cols, tileSize) => {
+            let html = ""
+
+            for (let i = 0; i < rows; i++) {
+                for (let j = 0; j < cols; j++) {
+
+                    html += createTruchetTile(tileSize, i, j);
+                }
+            }
+
+            return html;
+        }
+
+        // Set the size of each tile and create the interesting pattern
+        document.querySelector("svg").innerHTML = createTruchetPattern(20, 20, 50);
+        console.log(document.querySelector("svg").outerHTML);
+    </script>
+</body>
+
+</html>

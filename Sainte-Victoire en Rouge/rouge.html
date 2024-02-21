@@ -69,33 +69,39 @@
             </svg>`
         }
 
-        const drawRect = (x, y, width, height, strokeColor) => {
+        const drawRect = (x, y, width, height, stroke) => {
             return `
             <rect x="${x}" y="${y}" width="${width}" height="${height}" stroke="${strokeColor}" fill="none" />
             `
         }
 
-        const drawPolygon = (points, strokeColor) => {
+        const drawPolygon = (points, stroke) => {
             return `
             <polygon points="${points}" stroke="${strokeColor}" fill="none" />
             `
         }
 
-        const drawCircle = (cx, cy, r, strokeColor) => {
+        const drawCircle = (cx, cy, r, stroke) => {
             return `
             <circle cx="${cx}" cy="${cy}" r="${r}" stroke="${strokeColor}" fill="none" />
             `
         }
 
-        const drawEllipse = (cx, cy, rx, ry, strokeColor) => {
+        const drawEllipse = (cx, cy, rx, ry, stroke) => {
             return `
             <ellipse cx="${cx}" cy="${cy}" rx="${rx}" ry="${ry}" stroke="${strokeColor}" fill="none" />
             `
         }
 
-        const drawLine = (x1, y1, x2, y2, strokeColor) => {
+        const drawLine = (x1, y1, x2, y2, stroke) => {
             return `
             <line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke="${strokeColor}" fill="none" />
+            `
+        }
+
+        const drawPath = (d, fill, stroke) => {
+            return `
+            <path d="${d}" fill="${fill}" stroke="${strokeColor}" />
             `
         }
 
